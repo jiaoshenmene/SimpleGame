@@ -25,8 +25,6 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "GameOverLayer.h"
-
-
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -60,7 +58,7 @@ bool HelloWorld::init()
 
     
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("player.png");
+    auto sprite = Sprite::create("player2.png");
     if (sprite == nullptr)
     {
         problemLoading("'HelloWorld.png'");
@@ -78,7 +76,7 @@ bool HelloWorld::init()
     this->addChild(layer);
     
     Size winSize = Director::getInstance()->getWinSize();
-    player = Sprite::create("player.png");
+    player = Sprite::create("player2.png");
     player->setPosition(Vec2(40, winSize.height / 2));
     this->addChild(player);
     
@@ -89,6 +87,7 @@ bool HelloWorld::init()
     listener->setSwallowTouches(true);
     
     listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(HelloWorld::onTouchMove, this);
     listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnd, this);
     
     EventDispatcher *eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -102,13 +101,22 @@ bool HelloWorld::init()
 }
 
 bool HelloWorld::onTouchBegan(Touch *touch, Event *event) {
+    beforeVec2 = this->convertTouchToNodeSpace(touch);
+    return true;
+}
+
+bool HelloWorld::onTouchMove(Touch *touch, Event *event) {
+    Vec2 locationVec2 = this->convertTouchToNodeSpace(touch);
+    player->setPosition(locationVec2);
+    
     return true;
 }
 
 bool HelloWorld::onTouchEnd(Touch *touch, Event *event) {
+    
     Vec2 location = this->convertTouchToNodeSpace(touch);
     Size winSize = Director::getInstance()->getWinSize();
-    Sprite *projectile = Sprite::create("projectile.png");
+    Sprite *projectile = Sprite::create("projectile2.png");
     projectile->setPosition(player->getPosition());
     Vec2 offset = location - projectile->getPosition();
     
@@ -127,6 +135,29 @@ bool HelloWorld::onTouchEnd(Touch *touch, Event *event) {
     float velocity = 480 / 1;
     float realMoveDuration = length / velocity;
     
+    
+    float angleRadians = atanf((float)offRealY / (float)offRealX);
+    float angleDegrees = CC_RADIANS_TO_DEGREES(angleRadians);
+    float cocosAngle = -1 * angleDegrees;
+    
+    float rotateDegreesPerSecond = 180 / 0.5;
+    float degreesDiff = player->getRotation() - cocosAngle;
+
+    float rotateDuration = fabs(degreesDiff / rotateDegreesPerSecond);
+    
+    typedef std::function<void (Node *)> fpi1;
+    fpi1 f1 = std::bind(&HelloWorld::finishShoot, this);
+    RotateTo *rotateTo = RotateTo::create(rotateDuration, cocosAngle);
+    Sequence *sequence1 = Sequence::create(rotateTo, CallFuncN::create(f1),NULL);
+    player->runAction(sequence1);
+
+    
+
+    
+    
+    player->setRotation(cocosAngle);
+
+    
     typedef std::function<void (Node *)> fpi;
     fpi f = std::bind(&HelloWorld::spriteMoveFinished, this,std::placeholders::_1);
     
@@ -139,10 +170,15 @@ bool HelloWorld::onTouchEnd(Touch *touch, Event *event) {
     projectile->setTag(2);
     this->projectiles.pushBack(projectile);
     
+    
+    
     CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("pew-pew-lei.wav");
     return true;
 }
 
+void HelloWorld::finishShoot() {
+    
+}
 
 void HelloWorld::gameLogic(float dt) {
     this->addMonster();
@@ -226,8 +262,11 @@ void HelloWorld::spriteMoveFinished(Node *sender) {
     
     if (sprite->getTag() == 1) {
         monsters.eraseObject(sprite);
-        Scene *gameOverScene = GameOverLayer::sceneWithWon(false);
-        Director::getInstance()->replaceScene(gameOverScene);
+        if (monsters.size() > 5) {
+            Scene *gameOverScene = GameOverLayer::sceneWithWon(false);
+            Director::getInstance()->replaceScene(gameOverScene);
+        }
+        
     } else if (sprite->getTag() == 2) {
         projectiles.eraseObject(sprite);
     }

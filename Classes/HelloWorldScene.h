@@ -32,9 +32,11 @@ class HelloWorld : public cocos2d::Scene
     
 private:
     cocos2d::Sprite *player;
+    cocos2d::Sprite *nextProjectile;
     cocos2d::Vector<cocos2d::Sprite *> monsters;
     cocos2d::Vector<cocos2d::Sprite *> projectiles;
     int _monstersDestroyed;
+    cocos2d::Vec2 beforeVec2;
 public:
     static cocos2d::Scene* createScene();
 
@@ -47,8 +49,10 @@ public:
     void spriteMoveFinished(Node *sender);
     
     bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+    bool onTouchMove(cocos2d::Touch *touch, cocos2d::Event *event);
     bool onTouchEnd(cocos2d::Touch *touch, cocos2d::Event *event);
     void update(float delta);
+    void finishShoot();
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 };
