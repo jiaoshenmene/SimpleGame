@@ -24,6 +24,8 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "GameOverLayer.h"
+
 
 USING_NS_CC;
 
@@ -48,7 +50,7 @@ bool HelloWorld::init()
     {
         return false;
     }
-
+    _monstersDestroyed = 0;
     this->monsters = Vector<Sprite *>();
     this->projectiles = Vector<Sprite *>();
     
@@ -192,11 +194,19 @@ void HelloWorld::update(float delta) {
         for (Sprite *monster : monstersToDelete) {
             monsters.eraseObject(monster);
             this->removeChild(monster,true);
+            _monstersDestroyed ++;
+            if (_monstersDestroyed > 30) {
+                Scene *gameOverScene = GameOverLayer::sceneWithWon(true);
+                Director::getInstance()->replaceScene(gameOverScene);
+            }
         }
         
         if (!monstersToDelete.empty()) {
             projectilesToDelete.pushBack(projectile);
         }
+        
+        
+        
         
         monstersToDelete.clear();
     }
@@ -216,6 +226,8 @@ void HelloWorld::spriteMoveFinished(Node *sender) {
     
     if (sprite->getTag() == 1) {
         monsters.eraseObject(sprite);
+        Scene *gameOverScene = GameOverLayer::sceneWithWon(false);
+        Director::getInstance()->replaceScene(gameOverScene);
     } else if (sprite->getTag() == 2) {
         projectiles.eraseObject(sprite);
     }

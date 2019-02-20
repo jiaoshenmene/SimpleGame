@@ -125,7 +125,7 @@
 		34FDEDFD221D0341002CA1C9 /* player.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player.png; sourceTree = "<group>"; };
 		34FDEDFE221D0341002CA1C9 /* monster.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = monster.png; sourceTree = "<group>"; };
 		34FDEE04221D57AD002CA1C9 /* GameOverLayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameOverLayer.cpp; sourceTree = "<group>"; };
-		34FDEE05221D57AD002CA1C9 /* GameOverLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameOverLayer.hpp; sourceTree = "<group>"; };
+		34FDEE05221D57AD002CA1C9 /* GameOverLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameOverLayer.h; sourceTree = "<group>"; };
 		3EACC98E19EE6D4300EB3C5E /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		46880B7619C43A67006E1F66 /* CloseNormal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseNormal.png; sourceTree = "<group>"; };
 		46880B7719C43A67006E1F66 /* CloseSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseSelected.png; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 				46880B8619C43A87006E1F66 /* HelloWorldScene.cpp */,
 				46880B8719C43A87006E1F66 /* HelloWorldScene.h */,
 				34FDEE04221D57AD002CA1C9 /* GameOverLayer.cpp */,
-				34FDEE05221D57AD002CA1C9 /* GameOverLayer.hpp */,
+				34FDEE05221D57AD002CA1C9 /* GameOverLayer.h */,
 			);
 			name = Classes;
 			path = ../Classes;

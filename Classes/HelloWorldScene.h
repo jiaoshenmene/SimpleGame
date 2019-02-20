@@ -34,6 +34,7 @@ private:
     cocos2d::Sprite *player;
     cocos2d::Vector<cocos2d::Sprite *> monsters;
     cocos2d::Vector<cocos2d::Sprite *> projectiles;
+    int _monstersDestroyed;
 public:
     static cocos2d::Scene* createScene();
 
