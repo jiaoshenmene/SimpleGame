@@ -10,16 +10,17 @@
 
 #include "cocos2d.h"
 
-class LoginScene : public cocos2d::LayerColor
+class LoginSceneLayer : public cocos2d::LayerColor
 {
     
-    LoginScene(void);
-    ~LoginScene(void);
+    LoginSceneLayer(void);
+    ~LoginSceneLayer(void);
 public:
     bool initWithWon(bool won);
     //
-    static cocos2d::Scene* gameStart();
-    
+    void gameStart();
+    static LoginSceneLayer* createWithWon(bool won);
+    static cocos2d::Scene* createScene();
 };
 
 #endif /* LoginScene_hpp */

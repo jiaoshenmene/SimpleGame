@@ -6,18 +6,21 @@
 //
 
 #include "LoginScene.h"
+#include "HelloWorldScene.h"
 
-LoginScene::GameOverLayer(void)
+USING_NS_CC;
+
+LoginSceneLayer::LoginSceneLayer(void)
 {
 }
 
-LoginScene::~GameOverLayer(void)
+LoginSceneLayer::~LoginSceneLayer(void)
 {
 }
 
-LoginScene* LoginScene::createWithWon(bool won)
+LoginSceneLayer* LoginSceneLayer::createWithWon(bool won)
 {
-    GameOverLayer *pRet = new GameOverLayer();
+    LoginSceneLayer *pRet = new LoginSceneLayer();
     
     if (pRet && pRet->initWithWon(won)) {
         pRet->autorelease();
@@ -28,7 +31,7 @@ LoginScene* LoginScene::createWithWon(bool won)
     }
 }
 
-bool LoginScene::initWithWon(bool won)
+bool LoginSceneLayer::initWithWon(bool won)
 {
     bool bRet = false;
     do {
@@ -37,7 +40,7 @@ bool LoginScene::initWithWon(bool won)
         char *message;
         if (won)
         {
-            message = "You Won!";
+            message = "Game Start";
         }
         else
         {
@@ -45,14 +48,32 @@ bool LoginScene::initWithWon(bool won)
         }
         
         CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-        CCLabelTTF *label = CCLabelTTF::create(message, "Arial", 32);
-        label->setColor(ccc3(0, 0, 0));
-        label->setPosition(ccp(winSize.width / 2, winSize.height / 2));
-        this->addChild(label);
+//        CCLabelTTF *label = CCLabelTTF::create(message, "Arial", 32);
+//        label->setColor(ccc3(0, 0, 0));
+//        label->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+//        this->addChild(label);
         
-        this->runAction(CCSequence::create(CCDelayTime::create(3),
-                                           CCCallFunc::create(this, callfunc_selector(GameOverLayer::gameOverDone)),
-                                           NULL));
+//        this->runAction(CCSequence::create(CCDelayTime::create(3),
+//                                           CCCallFunc::create(this, callfunc_selector(LoginSceneLayer::gameOverDone)),
+//                                           NULL));
+
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        
+        // add a "close" icon to exit the progress. it's an autorelease object
+        
+        auto closeItem = MenuItemFont::create("Game Start", CC_CALLBACK_0(LoginSceneLayer::gameStart, this));
+        closeItem->setFontName("Arial");
+        closeItem->setFontSizeObj(32);
+        closeItem->setColor(Color3B(0, 0, 0));
+        
+        closeItem->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+        
+        
+        // create menu, it's an autorelease object
+        auto menu = Menu::create(closeItem, NULL);
+        menu->setPosition(Vec2::ZERO);
+        this->addChild(menu, 1);
+        
         
         bRet = true;
     } while (0);
@@ -61,3 +82,27 @@ bool LoginScene::initWithWon(bool won)
 }
 
 
+void LoginSceneLayer::gameStart()
+{
+    Director::getInstance()->replaceScene(HelloWorld::createScene());
+}
+
+
+cocos2d::Scene* LoginSceneLayer::createScene()
+{
+    Scene * scene = NULL;
+    do
+    {
+        scene = Scene::create();
+        CC_BREAK_IF(! scene);
+        
+        LoginSceneLayer *layer = LoginSceneLayer::createWithWon(true);
+        CC_BREAK_IF(! layer);
+        
+        scene->addChild(layer);
+    } while (0);
+    
+    return scene;
+    
+    
+}

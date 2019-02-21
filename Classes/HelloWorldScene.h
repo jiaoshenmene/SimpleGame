@@ -36,6 +36,7 @@ private:
     cocos2d::Vector<cocos2d::Sprite *> monsters;
     cocos2d::Vector<cocos2d::Sprite *> projectiles;
     int _monstersDestroyed;
+    int _monstersEscape;
     cocos2d::Vec2 beforeVec2;
 public:
     static cocos2d::Scene* createScene();

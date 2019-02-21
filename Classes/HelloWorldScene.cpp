@@ -262,7 +262,8 @@ void HelloWorld::spriteMoveFinished(Node *sender) {
     
     if (sprite->getTag() == 1) {
         monsters.eraseObject(sprite);
-        if (monsters.size() > 5) {
+        _monstersEscape ++;
+        if (_monstersEscape > 5) {
             Scene *gameOverScene = GameOverLayer::sceneWithWon(false);
             Director::getInstance()->replaceScene(gameOverScene);
         }
